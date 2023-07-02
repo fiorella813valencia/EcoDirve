@@ -8,9 +8,10 @@ import java.util.List;
 public interface RewardRepository extends JpaRepository<Reward,Long> {
 
     List<Reward> findAll();
-
+    List<Reward> findByScore(Double score);
     Reward findByName(String name);
-    Reward findByScore(Double score);
-    Reward findByFleetId(Long fleetId);
+
+    List<Reward> findByFleetId(Long fleetId);
+
 
 }

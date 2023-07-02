@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface RewardService {
     List<Reward> getAll();
+    List<Reward> getRewardByScore(Double score);
+    List<Reward> getRewardsByFleetId(Long fleetId);
     Page<Reward> getAll(Pageable pageable);
     Reward getById(Long rewardId);
     Reward create(Reward reward);

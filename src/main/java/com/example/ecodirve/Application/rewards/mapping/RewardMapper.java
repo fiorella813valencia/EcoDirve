@@ -28,6 +28,10 @@ public class RewardMapper implements Serializable {
         return new PageImpl<>(mapper.mapList(modelList,RewardResource.class),pageable,modelList.size());
     }
 
+    public List<RewardResource> modelList(List<Reward> modelList){
+        return mapper.mapList(modelList,RewardResource.class);
+    }
+
 
     public Reward toModel(CreateRewardResource resource){
         return mapper.map(resource,Reward.class);

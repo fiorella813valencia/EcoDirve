@@ -4,14 +4,15 @@ import com.example.ecodirve.Application.rewards.domain.model.Reward;
 import com.example.ecodirve.Application.rewards.domain.persistence.RewardRepository;
 import com.example.ecodirve.Application.rewards.domain.service.RewardService;
 import com.example.ecodirve.Shared.exception.ResourceNotFoundException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-import java.nio.file.ReadOnlyFileSystemException;
 import java.util.List;
-
+@Service
 public class RewardServiceImp implements RewardService {
 
     private static final String ENTITY="Reward";
@@ -25,6 +26,16 @@ public class RewardServiceImp implements RewardService {
     @Override
     public List<Reward> getAll() {
         return rewardRepository.findAll();
+    }
+
+    @Override
+    public List<Reward> getRewardByScore(Double score) {
+        return rewardRepository.findByScore(score);
+    }
+
+    @Override
+    public List<Reward> getRewardsByFleetId(Long fleetId) {
+        return rewardRepository.findByFleetId(fleetId);
     }
 
     @Override
