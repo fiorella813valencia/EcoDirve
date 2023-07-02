@@ -4,6 +4,7 @@ import com.example.ecodirve.Application.rewards.domain.model.Reward;
 import com.example.ecodirve.Application.rewards.domain.persistence.RewardRepository;
 import com.example.ecodirve.Application.rewards.domain.service.RewardService;
 import com.example.ecodirve.Shared.exception.ResourceNotFoundException;
+import com.example.ecodirve.Shared.exception.ResourceValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+
 @Service
 public class RewardServiceImp implements RewardService {
 
@@ -39,6 +42,16 @@ public class RewardServiceImp implements RewardService {
     }
 
     @Override
+    public Reward getNameAndFleetId(String name, Long fleetId) {
+        return rewardRepository.findByNameAndFleetId(name,fleetId);
+    }
+
+    @Override
+    public Reward getByName(String name) {
+        return rewardRepository.findByName(name);
+    }
+
+    @Override
     public Page<Reward> getAll(Pageable pageable) {
         return rewardRepository.findAll(pageable);
     }
@@ -50,6 +63,19 @@ public class RewardServiceImp implements RewardService {
 
     @Override
     public Reward create(Reward reward) {
+        Set<ConstraintViolation<Reward>> violations=validator.validate(reward);
+
+        if(!violations.isEmpty())
+            throw new ResourceValidationException(ENTITY,violations);
+
+        //validator for name
+        Reward rewardWithSameNameAndFleetId=rewardRepository.findByNameAndFleetId(reward.getName(), reward.getFleetId());
+        if(rewardWithSameNameAndFleetId!=null)
+            throw new ResourceValidationException(ENTITY,"Reward with the same name already exists");
+
+        //validator for score
+        if(reward.getScore()<=0)
+            throw new ResourceValidationException(ENTITY,"You must register a score with more than 0");
         return rewardRepository.save(reward);
     }
 

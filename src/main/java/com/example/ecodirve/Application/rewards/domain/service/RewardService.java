@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface RewardService {
     List<Reward> getAll();
+    Page<Reward> getAll(Pageable pageable);
     List<Reward> getRewardByScore(Double score);
     List<Reward> getRewardsByFleetId(Long fleetId);
-    Page<Reward> getAll(Pageable pageable);
+    Reward getNameAndFleetId(String name,Long fleetId);
+    Reward getByName(String name);
     Reward getById(Long rewardId);
     Reward create(Reward reward);
     Reward update(Long rewardId,Reward request);
