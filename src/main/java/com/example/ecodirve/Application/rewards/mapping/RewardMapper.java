@@ -42,5 +42,4 @@ public class RewardMapper implements Serializable {
         return mapper.map(resource,Reward.class);
     }
 
-
 }

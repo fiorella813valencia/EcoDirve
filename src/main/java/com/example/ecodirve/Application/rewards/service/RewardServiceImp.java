@@ -81,6 +81,29 @@ public class RewardServiceImp implements RewardService {
 
     @Override
     public Reward update(Long rewardId, Reward request) {
+        Set<ConstraintViolation<Reward>> violations=validator.validate(request);
+        if (!violations.isEmpty()) {
+            throw new ResourceValidationException(ENTITY, violations);
+        }
+
+        // Validator for name and fleetId
+        Reward existingReward = rewardRepository.findByNameAndFleetIdAndIdNot(request.getName(), request.getFleetId(), request.getId());
+        if (existingReward != null) {
+            throw new ResourceValidationException(ENTITY, "Reward with the same name already exists");
+        }
+
+        // Validator for score
+        if (request.getScore() <= 0) {
+            throw new ResourceValidationException(ENTITY, "You must register a score greater than 0");
+        }
+
+        Reward reward = rewardRepository.findById(rewardId)
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY, rewardId));
+
+        reward.setName(request.getName());
+        reward.setDescription(request.getDescription());
+        reward.setScore(request.getScore());
+
         return rewardRepository.save(request);
     }
 
