@@ -28,6 +28,7 @@ public class RewardController  {
     @GetMapping
     public List<RewardResource> getAllRewards(){
         return mapper.modelList(rewardService.getAll());
+        //return mapper.modelList_(rewardService.getAll());
     }
     //GET BY ID
     @GetMapping("{rewardId}")

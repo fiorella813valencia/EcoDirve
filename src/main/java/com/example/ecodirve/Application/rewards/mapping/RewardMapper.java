@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 @Component
 @EnableAutoConfiguration
@@ -22,6 +23,29 @@ public class RewardMapper implements Serializable {
 
     public RewardResource toResource(Reward model){
         return mapper.map(model, RewardResource.class);
+    }
+
+    //this throws the object fleetId null, but it will continue showing
+    public RewardResource toResource_(Reward model){
+        RewardResource resource = new RewardResource();
+        resource.setId(model.getId());
+        resource.setName(model.getName());
+        resource.setDescription(model.getDescription());
+        resource.setScore(model.getScore());
+        return resource;
+    }
+    //this throws the object fleetId null, but it will continue showing (list)
+    public List<RewardResource> modelList_(List<Reward> modelList) {
+        List<RewardResource> resourceList = new ArrayList<>();
+        for (Reward model : modelList) {
+            RewardResource resource = new RewardResource();
+            resource.setId(model.getId());
+            resource.setName(model.getName());
+            resource.setDescription(model.getDescription());
+            resource.setScore(model.getScore());
+            resourceList.add(resource);
+        }
+        return resourceList;
     }
 
     public Page<RewardResource> modelListPage(List<Reward> modelList, Pageable pageable){
